@@ -39,6 +39,7 @@ function App() {
         <h1>Full-Stack CI/CD Lab</h1>
         <p><b>Student:</b> Bektur Asilov</p>
         <p><b>Student ID:</b>220207046</p>
+        <p><b>API URL:</b> {API_URL}</p>
 
         <form onSubmit={addTask} className="form">
           <input
