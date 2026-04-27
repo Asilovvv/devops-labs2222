@@ -3,47 +3,30 @@ import ReactDOM from "react-dom/client";
 import axios from "axios";
 import "./style.css";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
-  const [error, setError] = useState("");
 
   const loadTasks = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/api/data`);
-      setTasks(response.data);
-      setError("");
-    } catch (err) {
-      setError("GET error: " + err.message);
-    }
+    const response = await axios.get(`${API_URL}/api/data`);
+    setTasks(response.data);
   };
 
   const addTask = async (event) => {
     event.preventDefault();
 
-    try {
-      if (!title.trim()) return;
+    if (!title.trim()) return;
 
-      await axios.post(`${API_URL}/api/data`, {
-        title: title
-      });
-
-      setTitle("");
-      await loadTasks();
-    } catch (err) {
-      setError("POST error: " + err.message);
-    }
+    await axios.post(`${API_URL}/api/data`, { title });
+    setTitle("");
+    loadTasks();
   };
 
   const deleteTask = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/api/data/${id}`);
-      await loadTasks();
-    } catch (err) {
-      setError("DELETE error: " + err.message);
-    }
+    await axios.delete(`${API_URL}/api/data/${id}`);
+    loadTasks();
   };
 
   useEffect(() => {
@@ -54,12 +37,8 @@ function App() {
     <div className="container">
       <div className="card">
         <h1>Full-Stack CI/CD Lab</h1>
-
         <p><b>Student:</b> Bektur Asilov</p>
-        <p><b>Student ID:</b> YOUR_STUDENT_ID</p>
-        <p><b>API URL:</b> {API_URL}</p>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <p><b>Student ID:</b>220207046</p>
 
         <form onSubmit={addTask} className="form">
           <input
